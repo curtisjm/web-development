@@ -1,0 +1,66 @@
+/* allows you to style the flexibility and sizing of different elements in the container from the container selector 
+without having to style the items */
+.flexbox-container-example {
+    /* create a flexbox container */
+    display: flex;
+    /* will rap items onto different lines when page is narrow enough */
+    flex-wrap: wrap;
+    /* center elements in the flexbox */
+    /* justify content has a bunch of different parameters to look into */
+    justify-content: center;
+    /* align items vertically inside of a container */
+    align-items: center;
+    /* only for multi-line flexbox containers */
+    /* tells container how much space to put between the lines */
+    align-content: center;
+}
+
+.flexbox-container-example-2 {
+    display: flex;
+    /* stack items in a colum instead of a row */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flexbox-container {
+    display: flex;
+}
+
+.flexbox-item {
+    width: 200px;
+    margin: 10px;
+    border: 3px solid #333;
+    background-color: #dfdfdf;
+}
+
+.flexbox-item-1 {
+    /* shorthand: grow shrink basis */
+    flex: 1 0 0px;
+    min-height: 100px;
+    /* make element not shrink when resizing */
+    flex-shrink: 0;
+    align-self: end;
+    /* allows you to change order of items in flexbox without changing the order in html */
+    /* try to avoid using order if possible */
+    order: 3;
+}
+
+.flexbox-item-2 {
+    min-height: 200px;
+    /* flex-grow takes all left over space and divides it between all of the different flex grows */
+    flex-grow: 2;
+    /* tells our flexbox where to start growing from */
+    flex-basis: 0;
+    /* overrides alignment property */
+    align-self: center;
+    order: 1;
+}
+
+.flexbox-item-3 {
+    min-height: 300px;
+    /* make item fill up empty space */
+    flex-grow: 1;
+    flex-basis: 0;
+    order: 2;
+}
