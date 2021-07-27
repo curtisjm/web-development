@@ -13,7 +13,7 @@ export default class Counters extends Component {
                 >
                     Reset
                 </button>
-                {counters.map((counter) => (
+                {counters.map(counter => (
                     // pass onDelete as a prop in order to handle the event
                     // the counters are part of this component's state, so we must handle it in this component
                     <Counter
