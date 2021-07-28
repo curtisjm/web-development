@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import Like from '../common/Like'
 import Table from '../common/Table'
 
-// bootstrap docs for table: https://getbootstrap.com/docs/5.0/content/tables/
-
 class MoviesTable extends Component {
     columns = [
         { path: 'title', label: 'Title' },
