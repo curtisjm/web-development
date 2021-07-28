@@ -1,10 +1,14 @@
 import React from 'react'
 
-const ListGroup = props => {
-    // pass text and value properties in order to make ListGroup implementation flexible
-    // can use the component for any kind of list
-    const { items, textProperty, valueProperty, onItemSelect, selectedItem } =
-        props
+// pass text and value properties in order to make ListGroup implementation flexible
+// can use the component for any kind of list
+const ListGroup = ({
+    items,
+    textProperty,
+    valueProperty,
+    onItemSelect,
+    selectedItem,
+}) => {
     return (
         <ul className="list-group">
             {items.map(item => (
