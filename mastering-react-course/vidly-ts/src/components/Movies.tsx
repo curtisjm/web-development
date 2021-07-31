@@ -7,6 +7,14 @@ import ListGroup from './common/ListGroup'
 import MoviesTable from './MoviesTable'
 import _ from 'lodash'
 
+interface MyState {
+    movies: []
+    genres: []
+    currentPage: number
+    pageSize: number
+    sortColumn: { path: string; order: string }
+}
+
 export default class Movies extends Component {
     state = {
         movies: [],
