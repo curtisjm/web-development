@@ -8,7 +8,7 @@ class TableHeader extends Component {
     raiseSort = path => {
         const sortColumn = { ...this.props.sortColumn }
         // if the current sort path is the same as the one clicked, swap sort order
-        if (sortColumn.path == path) {
+        if (sortColumn.path === path) {
             sortColumn.order = sortColumn.order === 'asc' ? 'desc' : 'asc'
             // if path is different, sort based on new path in ascending order
         } else {
