@@ -6,6 +6,7 @@ import React, { Component } from 'react'
 import Pagination from './common/Pagination'
 import ListGroup from './common/ListGroup'
 import MoviesTable from './MoviesTable'
+import SearchBox from './SearchBox'
 import _ from 'lodash'
 
 export default class Movies extends Component {
@@ -14,6 +15,8 @@ export default class Movies extends Component {
         genres: [],
         currentPage: 1,
         pageSize: 4,
+        searchQuery: '',
+        selectedGenre: null,
         // initially sort by title in ascending order
         sortColumn: { path: 'title', order: 'asc' },
     }
@@ -42,7 +45,15 @@ export default class Movies extends Component {
     }
 
     handleGenreSelect = genre => {
-        this.setState({ selectedGenre: genre, currentPage: 1 })
+        this.setState({ selectedGenre: genre, searchQuery: '', currentPage: 1 })
+    }
+
+    handleSearch = query => {
+        this.setState({
+            searchQuery: query,
+            selectedGenre: null,
+            currentPage: 1,
+        })
     }
 
     handleSort = sortColumn => {
@@ -51,18 +62,24 @@ export default class Movies extends Component {
 
     getPagedData = () => {
         const {
-            movies: allMovies,
             pageSize,
             currentPage,
-            selectedGenre,
             sortColumn,
+            selectedGenre,
+            searchQuery,
+            movies: allMovies,
         } = this.state
 
         // filter
-        const filtered =
-            selectedGenre && selectedGenre._id
-                ? allMovies.filter(m => m.genre._id === selectedGenre._id)
-                : allMovies
+        let filtered = allMovies
+        // if user has entered text into search bar
+        if (searchQuery)
+            filtered = allMovies.filter(m =>
+                m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+            )
+        // if we just want to filter by genre
+        else if (selectedGenre && selectedGenre._id)
+            filtered = allMovies.filter(m => m.genre._id === selectedGenre._id)
 
         // sort
         const sorted = _.orderBy(
@@ -79,7 +96,7 @@ export default class Movies extends Component {
 
     render() {
         const { length: count } = this.state.movies
-        const { pageSize, currentPage, sortColumn } = this.state
+        const { pageSize, currentPage, sortColumn, searchQuery } = this.state
 
         if (count === 0) return <p>There are no movies in the database</p>
 
@@ -95,7 +112,6 @@ export default class Movies extends Component {
                     />
                 </div>
                 <div className="col">
-                    <p>Showing {totalCount} movies in the database</p>
                     <Link
                         to="/movies/new"
                         className="btn btn-primary"
@@ -103,6 +119,11 @@ export default class Movies extends Component {
                     >
                         New Movie
                     </Link>
+                    <p>Showing {totalCount} movies in the database</p>
+                    <SearchBox
+                        value={searchQuery}
+                        onChange={this.handleSearch}
+                    />
                     <MoviesTable
                         movies={movies}
                         sortColumn={sortColumn}
