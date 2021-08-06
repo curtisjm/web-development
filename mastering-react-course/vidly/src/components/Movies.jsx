@@ -1,6 +1,7 @@
 import { getMovies } from '../services/fakeMovieService'
 import { getGenres } from '../services/fakeGenreService'
 import { paginate } from '../utils/paginate'
+import { Link } from 'react-router-dom'
 import React, { Component } from 'react'
 import Pagination from './common/Pagination'
 import ListGroup from './common/ListGroup'
@@ -95,6 +96,13 @@ export default class Movies extends Component {
                 </div>
                 <div className="col">
                     <p>Showing {totalCount} movies in the database</p>
+                    <Link
+                        to="/movies/new"
+                        className="btn btn-primary"
+                        style={{ marginBottom: 20 }}
+                    >
+                        New Movie
+                    </Link>
                     <MoviesTable
                         movies={movies}
                         sortColumn={sortColumn}
