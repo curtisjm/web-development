@@ -1,5 +1,7 @@
-import axios from 'axios'
 import { toast } from 'react-toastify'
+import * as Sentry from '@sentry/react'
+import logger from './logService'
+import axios from 'axios'
 
 // pass functions for successful and failed responses
 // pass null here because we only want to intercepted failed responses
@@ -17,7 +19,7 @@ axios.interceptors.response.use(undefined, error => {
     //      - log the errors
     //      - display a generic and friendly error message to user
     if (!expectedError) {
-        console.log('Logging the error', error)
+        logger.log(error)
         toast.error('An unexpected error occurred')
     }
     // if error is expected
