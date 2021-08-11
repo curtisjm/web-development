@@ -1,12 +1,25 @@
 import React, { Component } from 'react'
+import { ToastContainer } from 'react-toastify'
 import http from './services/httpService'
 import config from './config.json'
+import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 
 // const config.apiEndpoint = 'https://jsonplaceholder.typicode.com/posts'
 
+interface State {
+    posts: Post[]
+}
+
+interface Post {
+    userId: number
+    id: number
+    title: string
+    body: string
+}
+
 class App extends Component {
-    state = {
+    state: State = {
         posts: [],
     }
 
@@ -14,22 +27,22 @@ class App extends Component {
         // a promise is an object that holds the result of an async operation
         // starts pending --> resolved (success) OR rejected (failure)
         // get data from response object
-        const { data: posts } = await http.get(config.apiEndpoint)
+        const { data: posts } = await http.get(config['apiEndpoint:'])
         this.setState({ posts })
     }
 
     handleAdd = async () => {
         const obj = { title: 'a', body: 'b' }
-        const { data: post } = await http.post(config.apiEndpoint, obj)
+        const { data: post } = await http.post(config['apiEndpoint:'], obj)
 
         const posts = [post, ...this.state.posts]
         this.setState({ posts })
     }
 
-    handleUpdate = async post => {
+    handleUpdate = async (post: Post) => {
         post.title = 'UPDATED'
         // put updates all properties, patch updates one or more properties
-        await http.put(config.apiEndpoint + '/' + post.id, post)
+        await http.put(config['apiEndpoint:'] + '/' + post.id, post)
         // http.patch(config.apiEndpoint + '/' + post.id, { title: post.tile })
         const posts = [...this.state.posts]
         const index = posts.indexOf(post)
@@ -37,7 +50,7 @@ class App extends Component {
         this.setState({ posts })
     }
 
-    handleDelete = async post => {
+    handleDelete = async (post: Post) => {
         const originalPosts = this.state.posts
 
         // update ui first
@@ -46,7 +59,7 @@ class App extends Component {
 
         // make call to server
         try {
-            await http.delete(config.apiEndpoint + '/' + post.id)
+            await http.delete(config['apiEndpoint:'] + '/' + post.id)
             // if there is an error deleting, put the ui back to how it was
         } catch (error) {
             if (error.response && error.response.status === 404) {
@@ -59,6 +72,7 @@ class App extends Component {
     render() {
         return (
             <React.Fragment>
+                <ToastContainer />
                 <button className="btn btn-primary" onClick={this.handleAdd}>
                     Add
                 </button>
