@@ -2,6 +2,8 @@
     "compilerOptions": {
         "target": "esnext",
         "watch": true,
-        "lib": ["DOM", "ES2021"]
+        "lib": ["DOM", "ES2021"],
+        "outDir": "./build",
+        "rootDir": "./src"
     }
 }
