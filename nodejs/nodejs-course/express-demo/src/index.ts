@@ -1,107 +1,54 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
+import Debug from 'debug'
+// set debug environment variable to choose which namespace to use: > export DEBUG=app:startup
+// can also set multiple > DEBUG=app:startup,app:db
+// or all of the debuggers > DEBUG=*
+const startupDebugger = Debug('app:startup')
+const dbDebugger = Debug('app:db')
+
 import express from 'express'
-import Joi from 'joi'
+import helmet from 'helmet'
+import morgan from 'morgan'
+import config from 'config'
+import logger from './middleware/logger.js'
+import authenticator from './middleware/authenticator.js'
+import courses from './routes/courses.js'
+import home from './routes/home.js'
 
 const app = express()
 
+// use a templating engine
+app.set('view engine', 'pug')
+app.set('views', './src/views')
+
+// middleware functions
 // allow express to parse from request body
 app.use(express.json())
+// parse url encoded bodies
+app.use(express.urlencoded({ extended: true }))
+// load static assets
+app.use(express.static('src/public'))
+// third party middleware
+app.use(helmet())
+// next is reference to next middleware function in the pipeline
+app.use(logger)
+app.use(authenticator)
 
-interface Course {
-    id: number
-    name: string
-}
+// for any routes that start with this path, use this router
+app.use('/api/courses', courses)
+app.use('/', home)
 
-const courses: Course[] = [
-    { id: 1, name: 'course1' },
-    { id: 2, name: 'course2' },
-    { id: 3, name: 'course3' },
-]
+// configuration
+console.log(`Application Name: ${config.get('name')}`)
+console.log(`Mail Server: ${config.get('mail.host')}`)
+// console.log(`Mail Password: ${config.get('mail.password')}`)
+console.log(`Mail Password: ${process.env.APP_PASSWORD}`)
 
-app.get('/', (req, res) => {
-    res.send('Hello World')
-})
-
-app.get('/api/courses', (req, res) => {
-    res.send(courses)
-})
-
-app.get('/api/courses/:id', (req, res) => {
-    const course = courses.find(c => c.id === parseInt(req.params.id))
-    if (!course)
-        return res
-            .status(404)
-            .send('The course with the given ID was not found.')
-    res.send(course)
-})
-
-app.get('/api/posts/:year/:month', (req, res) => {
-    // use req.query to get query parameters
-    // ex: ?sortBy=name
-    res.send(req.query)
-})
-
-app.post('/api/courses', (req, res) => {
-    const { error } = validateCourse(req.body)
-
-    // 400 bad request
-    if (error) return res.status(400).send(error.details[0].message)
-
-    const course: Course = {
-        id: courses.length + 1,
-        // get name from the object in the body of the request
-        name: req.body.name,
-    }
-    courses.push(course)
-    // return course object to client because client may need to know about its properties such as the new id
-    res.send(course)
-})
-
-app.put('/api/courses/:id', (req, res) => {
-    // look up course
-    // if does not exist, return 404
-    const course = courses.find(c => c.id === parseInt(req.params.id))
-    if (!course)
-        return res
-            .status(404)
-            .send('The course with the given ID was not found.')
-
-    // validate
-    // if invalid, return 400
-    // get the error from result object
-    const { error } = validateCourse(req.body)
-
-    // 400 bad request
-    if (error) return res.status(400).send(error.details[0].message)
-
-    // update course
-    course.name = req.body.name
-    // return updated course for client
-    res.send(course)
-})
-
-app.delete('/api/courses/:id', (req, res) => {
-    // look up course
-    // if it doesn't exist, return 404
-    const course = courses.find(c => c.id === parseInt(req.params.id))
-    if (!course)
-        return res
-            .status(404)
-            .send('The course with the given ID was not found.')
-
-    // delete
-    const index = courses.indexOf(course)
-    courses.splice(index, 1)
-
-    // return deleted course
-    res.send(course)
-})
-
-function validateCourse(course: Course) {
-    const schema = Joi.object({
-        name: Joi.string().min(3).required(),
-    })
-
-    return schema.validate(course)
+if (app.get('env') === 'development') {
+    app.use(morgan('tiny'))
+    startupDebugger('Morgan enabled...')
 }
 
 // dynamically set port if needed because of environment variable on machine
