@@ -1,0 +1,19 @@
+{
+    "name": "async-demo",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "tsc": "tsc"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "typescript": "^4.3.5"
+    },
+    "devDependencies": {
+        "@types/node": "^16.6.1"
+    },
+    "type": "module"
+}
