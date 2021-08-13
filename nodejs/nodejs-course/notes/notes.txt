@@ -1,0 +1,18 @@
+/// Node.js Course \\\
+
+--- Updating Packages ---
+- install tool to check for and update packages
+	> npm i -g npm-check-updates
+- check for packages that need updates in current project
+	> ncu
+- update package.json
+	> ncu -u
+- install updates
+	> npm i
+
+--- Publishing a Package ---
+- login to npm
+	> npm login
+- publish a package
+	> npm publish
+		- if there is an error, make sure to give package a unique name in package.json
