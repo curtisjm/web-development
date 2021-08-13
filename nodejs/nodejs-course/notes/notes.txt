@@ -16,3 +16,6 @@
 - publish a package
 	> npm publish
 		- if there is an error, make sure to give package a unique name in package.json
+
+--- Auto Update Server ---
+	> npm i -g nodemon
