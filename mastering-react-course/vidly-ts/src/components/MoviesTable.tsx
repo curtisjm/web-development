@@ -2,13 +2,22 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Like from './common/Like'
 import Table from './common/Table'
+import { Movie, SortColumn } from './Movies'
 
-class MoviesTable extends Component {
+interface Props {
+    movies: Array<Movie>
+    sortColumn: SortColumn
+    onSort: (sortColumn: SortColumn) => void
+    onLike: (movie: Movie) => void
+    onDelete: (movie: Movie) => void
+}
+
+class MoviesTable extends Component<Props> {
     columns = [
         {
             path: 'title',
             label: 'Title',
-            content: movie => (
+            content: (movie: Movie) => (
                 <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
             ),
         },
@@ -20,7 +29,7 @@ class MoviesTable extends Component {
         // add key and content properties for displaying special columns in table body and header
         {
             key: 'like',
-            content: movie => (
+            content: (movie: Movie) => (
                 <Like
                     onClick={() => this.props.onLike(movie)}
                     liked={movie.liked}
@@ -29,7 +38,7 @@ class MoviesTable extends Component {
         },
         {
             key: 'delete',
-            content: movie => (
+            content: (movie: Movie) => (
                 <button
                     onClick={() => this.props.onDelete(movie)}
                     className="btn btn-danger btn sm"

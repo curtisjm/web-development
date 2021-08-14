@@ -7,22 +7,46 @@ import ListGroup from './common/ListGroup'
 import MoviesTable from './MoviesTable'
 import _ from 'lodash'
 
-interface MyState {
-    movies: []
-    genres: []
+interface State {
+    movies: Array<Movie> | []
+    genres: Array<Genre> | []
     currentPage: number
     pageSize: number
-    sortColumn: { path: string; order: string }
+    sortColumn: SortColumn
+    selectedGenre: Genre | undefined
 }
 
+export interface Movie {
+    _id: string
+    title: string
+    genre: Genre
+    numberInStock: number
+    dailyRentalRate: number
+    publishDate?: string
+    liked?: boolean
+}
+
+export interface Genre {
+    _id: string
+    name: string
+}
+
+export interface SortColumn {
+    path: string
+    order: Order
+}
+
+export type Order = boolean | 'asc' | 'desc'
+
 export default class Movies extends Component {
-    state = {
+    state: State = {
         movies: [],
         genres: [],
         currentPage: 1,
         pageSize: 4,
         // initially sort by title in ascending order
         sortColumn: { path: 'title', order: 'asc' },
+        selectedGenre: undefined,
     }
 
     componentDidMount() {
@@ -30,13 +54,15 @@ export default class Movies extends Component {
         this.setState({ movies: getMovies(), genres })
     }
 
-    handleDelete = movie => {
+    handleDelete = (movie: Movie) => {
         // create a new array of movies with all of the movies except for the one deleted
-        const movies = this.state.movies.filter(m => m._id !== movie._id)
+        const movies = this.state.movies.filter(
+            (m: Movie) => m._id !== movie._id
+        )
         this.setState({ movies })
     }
 
-    handleLike = movie => {
+    handleLike = (movie: Movie) => {
         const movies = [...this.state.movies]
         const index = movies.indexOf(movie)
         movies[index] = { ...movies[index] }
@@ -44,15 +70,15 @@ export default class Movies extends Component {
         this.setState({ movies })
     }
 
-    handlePageChange = page => {
+    handlePageChange = (page: number) => {
         this.setState({ currentPage: page })
     }
 
-    handleGenreSelect = genre => {
+    handleGenreSelect = (genre: Genre) => {
         this.setState({ selectedGenre: genre, currentPage: 1 })
     }
 
-    handleSort = sortColumn => {
+    handleSort = (sortColumn: SortColumn) => {
         this.setState({ sortColumn })
     }
 

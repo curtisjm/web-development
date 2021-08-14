@@ -1,4 +1,5 @@
 import * as genresAPI from './fakeGenreService'
+import { Movie, Genre } from '../components/Movies'
 
 const movies = [
     {
@@ -72,11 +73,11 @@ export function getMovies() {
     return movies
 }
 
-export function getMovie(id) {
+export function getMovie(id: string) {
     return movies.find(m => m._id === id)
 }
 
-export function saveMovie(movie) {
+export function saveMovie(movie: Movie) {
     let movieInDb = movies.find(m => m._id === movie._id) || {}
     movieInDb.name = movie.name
     movieInDb.genre = genresAPI.genres.find(g => g._id === movie.genreId)
@@ -91,7 +92,7 @@ export function saveMovie(movie) {
     return movieInDb
 }
 
-export function deleteMovie(id) {
+export function deleteMovie(id: string) {
     let movieInDb = movies.find(m => m._id === id)
     movies.splice(movies.indexOf(movieInDb), 1)
     return movieInDb
