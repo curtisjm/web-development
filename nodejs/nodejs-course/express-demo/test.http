@@ -1,0 +1,14 @@
+PUT http://localhost:3000/api/courses/1
+Content-Type: application/json
+
+{
+	"name": "new course"
+}
+
+###
+
+GET http://localhost:3000/api/courses
+
+###
+
+DELETE http://localhost:3000/api/courses/1 
