@@ -6,13 +6,13 @@ import { SortColumn } from '../Movies'
 // bootstrap docs for table: https://getbootstrap.com/docs/5.0/content/tables/
 
 interface Props {
-    columns: Array<Column> 
+    columns: Column[]
     sortColumn: SortColumn
     onSort: (sortColumn: SortColumn) => void
-    data:
+    data: any[]
 }
 
-type Column = 
+export type Column = 
     | {
         path: string
         label: string
@@ -23,7 +23,7 @@ type Column =
         content?: (arg0: any) => JSX.Element
     }
 
-const Table = ({ columns, sortColumn, onSort, data }) => {
+const Table = ({ columns, sortColumn, onSort, data }: Props) => {
     return (
         <table className="table">
             <TableHeader

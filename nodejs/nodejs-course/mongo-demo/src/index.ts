@@ -33,30 +33,40 @@ async function createCourse() {
     const result = await course.save()
     console.log(result)
 }
-// createCourse()
+createCourse()
 
 async function getCourses() {
-	/* --- Comparison Query Operators --- */
-	// eq (equal)
-	// ne (not equal)
-	// gt (greater than)
-	// gte (greater than or to)
-	// le (less than)
-	// lte (less than or equal to)
-	// in
-	// nin (not in)
-	
-	// ex: price between 10 and 20
-	// -  Course.find({ price: { $gte: 10, $lte: 20 } })
-	// ex: price is 10, 15, or 20
-	// -  Course.find({ price: { $in: [10, 15, 20] } })
+    /* --- Comparison Query Operators --- */
+    // eq (equal)
+    // ne (not equal)
+    // gt (greater than)
+    // gte (greater than or to)
+    // le (less than)
+    // lte (less than or equal to)
+    // in
+    // nin (not in)
 
-	/* --- Logical Query Operators --- */
-	// or
-	// and
+    // ex: price between 10 and 20
+    // -  Course.find({ price: { $gte: 10, $lte: 20 } })
+    // ex: price is 10, 15, or 20
+    // -  Course.find({ price: { $in: [10, 15, 20] } })
 
-	// ex: author is Mosh or the course is published
-	// -  Course.find().or([ { author: 'Mosh }, { isPublished: true } ])
+    /* --- Logical Query Operators --- */
+    // or
+    // and
+
+    /* --- Regular Expressions --- */
+    // .find({ param: /pattern/ })
+
+    // ex: author starts with Mosh
+    // -  Course.find({ author: /^Mosh/ })
+    // ex: author ends with Hamedani, case insensitive
+    // -  Course.find({ author: /Hamedani$/i })
+    // ex: author contains word Mosh
+    // -  Course.find({ author: /.*Mosh.*/ })
+
+    // ex: author is Mosh or the course is published
+    // -  Course.find().or([ { author: 'Mosh }, { isPublished: true } ])
 
     // find all published courses with Mosh as the author
     // get 10 max
@@ -66,6 +76,22 @@ async function getCourses() {
         .limit(10)
         .sort({ name: 1 })
         .select({ name: 1, tags: 1 })
+        // return count of documents that match this criteria
+        .countDocuments()
+    console.log(courses)
+
+
+    /* --- Pagination -- */
+    // normally get these numbers from query string:
+    //  - /api/courses?pageNumber=2&pageSize=10
+    const pageNumber = 2
+    const pageSize = 10
+
+    const courses2 = await Course.find({ author: 'Mosh', isPublished: 'true' })
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize)
+        .sort({ name: 1 })
+        .select({ name: 1, tags: 1 })
     console.log(courses)
 }
-getCourses()
+// getCourses()
