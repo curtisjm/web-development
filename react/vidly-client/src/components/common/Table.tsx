@@ -14,11 +14,13 @@ interface Props {
 
 export type Column = 
     | {
+        key?: undefined
         path: string
         label: string
         content?: (arg0: any) => JSX.Element
     }
     | {
+        path?: undefined
         key: string
         content?: (arg0: any) => JSX.Element
     }

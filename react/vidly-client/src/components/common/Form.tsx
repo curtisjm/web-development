@@ -1,7 +1,12 @@
+// @ts-nocheck
 import React, { Component } from 'react'
-import Joi from 'joi-browser'
+import Joi from 'joi'
 import Input from './Input'
 import Select from './Select'
+
+interface State {}
+
+interface Props {}
 
 class Form extends Component {
     state = {
@@ -12,7 +17,8 @@ class Form extends Component {
     validate = () => {
         const options = { abortEarly: false }
         // take error from result object
-        const { error } = Joi.validate(this.state.data, this.schema, options)
+        const { error } = this.schema.validate(this.state.data, options)
+        // const { error } = Joi.validate(this.state.data, this.schema, options)
         if (!error) return null
 
         const errors = {}
@@ -25,7 +31,7 @@ class Form extends Component {
         const obj = { [name]: value }
         const schema = { [name]: this.schema[name] }
         // take the error from result object
-        const { error } = Joi.validate(obj, schema)
+        const { error } = schema.validate(obj)
         return error ? error.details[0].message : null
     }
 

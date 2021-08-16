@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 
 // use spread operator to set any other attributes that are in the props object

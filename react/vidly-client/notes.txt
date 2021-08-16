@@ -2,3 +2,6 @@ ListGroup
 SearchBox
 MoviesTable
 	Like
+	Table
+		TableHeader
+		TableBody

@@ -1,15 +1,21 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
+import { Column } from './Table'
 
-class TableBody extends Component {
+interface Props {
+    data: any[]
+    columns: Column[]
+}
+
+class TableBody extends Component<Props> {
     // render custom content for specialty columns
-    renderCell = (item, column) => {
+    renderCell = (item: any, column: Column) => {
         if (column.content) return column.content(item)
 
-        return _.get(item, column.path)
+        if (typeof column.path === 'string') return _.get(item, column.path)
     }
 
-    createKey = (item, column) => {
+    createKey = (item: any, column: Column) => {
         return item._id + (column.path || column.key)
     }
 

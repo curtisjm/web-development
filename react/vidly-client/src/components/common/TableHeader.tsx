@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { SortColumn } from '../Movies';
+import { SortColumn } from '../Movies'
 import { Column } from './Table'
 
 // columns: array
@@ -13,7 +13,8 @@ interface Props {
 }
 
 class TableHeader extends Component<Props> {
-    raiseSort = (path: string) => {
+    raiseSort = (path: string | undefined) => {
+        if (typeof path === 'undefined') return
         const sortColumn = { ...this.props.sortColumn }
         // if the current sort path is the same as the one clicked, swap sort order
         if (sortColumn.path === path) {
@@ -45,7 +46,7 @@ class TableHeader extends Component<Props> {
                             key={column.path || column.key}
                             onClick={() => this.raiseSort(column.path)}
                         >
-                            {column.label} {this.renderSortIcon(column)}
+                            {'label' in column ? column.label : ''} {this.renderSortIcon(column)}
                         </th>
                     ))}
                 </tr>

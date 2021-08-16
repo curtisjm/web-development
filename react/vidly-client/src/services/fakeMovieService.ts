@@ -1,4 +1,6 @@
+// @ts-nocheck
 import * as genresAPI from './fakeGenreService'
+import { Movie } from '../components/Movies'
 
 const movies = [
     {
@@ -72,7 +74,7 @@ export function getMovies() {
     return movies
 }
 
-export function getMovie(id) {
+export function getMovie(id: string) {
     return movies.find(m => m._id === id)
 }
 

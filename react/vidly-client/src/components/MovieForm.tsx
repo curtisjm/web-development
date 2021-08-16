@@ -1,8 +1,29 @@
+// @ts-nocheck
 import React from 'react'
-import Joi from 'joi-browser'
+import Joi from 'joi'
 import Form from './common/Form'
 import { getMovie, saveMovie } from '../services/fakeMovieService'
 import { getGenres } from '../services/fakeGenreService'
+import { Movie, Genre } from './Movies'
+import { RouteComponentProps } from 'react-router-dom'
+
+interface State {
+    data: {
+        title: string
+        genreId: string
+        numberInStock: string
+        dailyRentalRate: string
+    }
+    genres: Genre[]
+    errors: {}
+}
+
+type TParams = { id: string }
+
+interface Props {
+    match: RouteComponentProps<TParams>
+    history: number
+}
 
 class MovieForm extends Form {
     state = {
@@ -16,7 +37,7 @@ class MovieForm extends Form {
         errors: {},
     }
 
-    schema = {
+    schema = Joi.object({
         // won't have an id provided from the user, so don't require it
         _id: Joi.string(),
         title: Joi.string().required().label('Title'),
@@ -31,7 +52,7 @@ class MovieForm extends Form {
             .min(0)
             .max(10)
             .label('Daily Rental Rate'),
-    }
+    })
 
     componentDidMount() {
         const genres = getGenres()
@@ -48,7 +69,7 @@ class MovieForm extends Form {
     }
 
     // need to map data from the server to the proper structure for the form
-    mapToViewModel(movie) {
+    mapToViewModel(movie: Movie) {
         return {
             _id: movie._id,
             title: movie.title,
